@@ -72,8 +72,15 @@
 }
 
 .move {
-    margin-top: -84px;
+    margin-top: -94px;
     transition: margin-top .8s ease-in-out;
+}
+.iconType {
+    width: 40px;
+    height: 40px;
+}
+.iconType img {
+    width: 100%;
 }
 
 @media screen and (min-width: 600px) {
