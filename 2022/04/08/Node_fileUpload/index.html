@@ -275,6 +275,26 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (type === <span class="string">&#x27;examine&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> numberFile = fs.<span class="title function_">readdirSync</span>(filePath).<span class="property">length</span>;</span><br><span class="line">        <span class="keyword">const</span> resData = &#123;</span><br><span class="line">            <span class="attr">code</span>: <span class="number">200</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (numberFile === <span class="title class_">Number</span>(total)) &#123;</span><br><span class="line">            resData.<span class="property">done</span> = <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            resData.<span class="property">done</span> = <span class="literal">false</span>;</span><br><span class="line">            resData.<span class="property">chunkSize</span> = numberFile;</span><br><span class="line">        &#125;</span><br><span class="line">        ctx.<span class="property">body</span> = resData;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <p><img src="/image-20220408235355511.png" alt="image-20220408235355511"></p>
+<h1 id="探讨"><a href="#探讨" class="headerlink" title="探讨"></a>探讨</h1><h2 id="分片大小的选择"><a href="#分片大小的选择" class="headerlink" title="分片大小的选择"></a>分片大小的选择</h2><ul>
+<li>分片越小，请求越多，开销越多</li>
+<li>分片太大，导致部分文件未分片或分片太少，并没有很好的减少重传的开销。</li>
+</ul>
+<p><strong>如何选择分片？</strong></p>
+<ul>
+<li>分段的大小可以参照网速和稳定性以及服务器端，在局域网中传输10M左右的文件是很快的。一般选择1M，小于2M则不用分片。如果文件太大，建议分片的大小是5M，如果文件相对较小，那么建议分片的大小是2M。</li>
+<li>根据文件大小，定义分片数量，自适应的确定分片大小。</li>
+</ul>
+<p><strong>分片传输的优化</strong></p>
+<ul>
+<li>可以采用批请求，比如10片一组。</li>
+<li>并行传输。</li>
+</ul>
+<h2 id="MD5加密算法的特征选择"><a href="#MD5加密算法的特征选择" class="headerlink" title="MD5加密算法的特征选择"></a>MD5加密算法的特征选择</h2><p><strong>文件HASH</strong></p>
+<p>通过计算HASH的方法可以唯一标识一个文件，基于文件数据流的，通过MD5可以得到此HASH。</p>
+<p><strong>优化</strong></p>
+<p>基于文件内容计算Hash是非常耗时的，并且会阻塞UI渲染线程。可以利用 <strong>web-worker</strong> 在worker线程中计算Hash。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myWorker = <span class="keyword">new</span> <span class="title class_">Worker</span>(<span class="string">&#x27;worker.js&#x27;</span>); <span class="comment">//指定worker.js脚本作为执行worker线程的环境</span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 </div>
