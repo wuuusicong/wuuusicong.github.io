@@ -35,7 +35,7 @@
 		<div class="header-top">
 			<div class="h-left">
 				<a href="/">
-					<img src="/image/logo2.png" alt="Quiet">
+					<img src="/image/sun.png" alt="Quiet">
 				</a>
 			</div>
 			<div class="h-right">
@@ -295,6 +295,9 @@
 <p>基于文件内容计算Hash是非常耗时的，并且会阻塞UI渲染线程。可以利用 <strong>web-worker</strong> 在worker线程中计算Hash。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myWorker = <span class="keyword">new</span> <span class="title class_">Worker</span>(<span class="string">&#x27;worker.js&#x27;</span>); <span class="comment">//指定worker.js脚本作为执行worker线程的环境</span></span><br></pre></td></tr></table></figure>
 
+<h2 id="秒传"><a href="#秒传" class="headerlink" title="秒传"></a>秒传</h2><ul>
+<li>判断文件Hash，如果文件已在服务端则直接显示上传成功。</li>
+</ul>
 
     </div>
 </div>
